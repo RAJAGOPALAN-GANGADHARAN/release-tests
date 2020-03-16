@@ -86,6 +86,7 @@ matrix:
       - export QTDIR="${QT_INSTALL_DIR}/${QT_VERSION}/msvc2017"
       - export QT_QPA_PLATFORM_PLUGIN_PATH="$(cygpath -u $QTDIR/plugins)"
       - export PATH="$(cygpath -u ${QTDIR})/bin:$PATH"
+      - 3rdparty/install-qt.sh -d ${QT_INSTALL_DIR} --version 1.1.1d openssl.win_x86
       - ./install-qtwebkit Windows_10-MSVC2017-Windows-Windows_10-X86
     before_script:
       - du -hs $QTDIR
@@ -110,6 +111,7 @@ matrix:
       - export QTDIR="${QT_INSTALL_DIR}/${QT_VERSION}/msvc2017_64"
       - export QT_QPA_PLATFORM_PLUGIN_PATH="$(cygpath -u $QTDIR/plugins)"
       - export PATH="$(cygpath -u ${QTDIR})/bin:$PATH"
+      - 3rdparty/install-qt.sh -d ${QT_INSTALL_DIR} --version 1.1.1d openssl.win_x64
       - ./install-qtwebkit Windows_10-MSVC2017-Windows-Windows_10-X86_64
     before_script:
       - du -hs $QTDIR

@@ -225,6 +225,16 @@ function compute_url(){
             return 0
         fi
 
+    elif [[ "${COMPONENT}" =~ "openssl" ]]; then
+
+        REMOTE_BASE="tools_mingw/qt.tools.${COMPONENT}"
+        REMOTE_PATH="$(${CURL} ${BASE_URL}/${REMOTE_BASE}/ | grep -o -E "${VERSION}[[:alnum:]_.\-]*\.7z" | tail -1)"
+
+        if [ ! -z "${REMOTE_PATH}" ]; then
+            echo "${BASE_URL}/${REMOTE_BASE}/${REMOTE_PATH}"
+            return 0
+        fi
+
     else
         # New repository format (>=5.9.6)
         REMOTE_BASE="qt5_${VERSION//./}/qt.qt5.${VERSION//./}.${TOOLCHAIN}"
