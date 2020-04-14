@@ -225,26 +225,6 @@ function compute_url(){
             return 0
         fi
 
-    elif [[ "${COMPONENT}" =~ "openssl.win_x86" ]]; then
-
-        REMOTE_BASE="tools_openssl_x86/qt.tools.${COMPONENT}"
-        REMOTE_PATH="$(${CURL} ${BASE_URL}/${REMOTE_BASE}/ | grep -o -E "${VERSION}[[:alnum:]_.\-]*\.7z" | tail -1)"
-
-        if [ ! -z "${REMOTE_PATH}" ]; then
-            echo "${BASE_URL}/${REMOTE_BASE}/${REMOTE_PATH}"
-            return 0
-        fi
-
-    elif [[ "${COMPONENT}" =~ "openssl.win_x64" ]]; then
-
-        REMOTE_BASE="tools_openssl_x64/qt.tools.${COMPONENT}"
-        REMOTE_PATH="$(${CURL} ${BASE_URL}/${REMOTE_BASE}/ | grep -o -E "${VERSION}[[:alnum:]_.\-]*\.7z" | tail -1)"
-
-        if [ ! -z "${REMOTE_PATH}" ]; then
-            echo "${BASE_URL}/${REMOTE_BASE}/${REMOTE_PATH}"
-            return 0
-        fi
-
     else
         # New repository format (>=5.9.6)
         REMOTE_BASE="qt5_${VERSION//./}/qt.qt5.${VERSION//./}.${TOOLCHAIN}"
