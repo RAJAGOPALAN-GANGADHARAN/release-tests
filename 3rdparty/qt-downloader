@@ -121,10 +121,9 @@ def download_and_extract(archives_url, archives, output, req_modules):
   for archive in archives:
     try:
       module = archive.split('-')[0]
-      # if req_modules != None and (module not in req_modules):
-      #   continue
+      if len(req_modules) != 0 and (module not in req_modules):
+        continue
       print('Downloading module {}... '.format(module), end='', flush=True)
-      print(archives_url+archive)
       with urllib.request.urlopen(archives_url + archive) as response, open(archive, 'wb') as out_file:
         shutil.copyfileobj(response, out_file)
 
@@ -147,7 +146,9 @@ def download_and_extract(archives_url, archives, output, req_modules):
       print('Interrupted')
       raise KeyboardInterrupt
     finally:
-      Path(archive).unlink()
+      module = archive.split('-')[0]
+      if len(req_modules) == 0 or (module in req_modules):
+        Path(archive).unlink()
 
   print('Finished installation')
 
@@ -318,7 +319,7 @@ def main():
   parser.add_argument('version', nargs='?', default='discover', help='Qt version conforming to Semantic Versioning format: major.minor.patch. Use \'latest\' to get most up to date version. Omit this to discover available versions.')
   parser.add_argument('toolchain', nargs='?', default='discover', help='Toolchain to use. Omit this to discover available toolchains')
   parser.add_argument('-a', '--all', action='store_true', help='Discover allowed values for all missing arguments')
-  parser.add_argument('--output', '-o', default='', help='Output directory')
+  parser.add_argument('--output', default='', help='Output directory')
   parser.add_argument('--qt_modules', default='', help='Download selected qt modules')
 
   args = parser.parse_args()

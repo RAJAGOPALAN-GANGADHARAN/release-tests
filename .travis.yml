@@ -159,18 +159,17 @@ matrix:
       DEPLOY=1
     install:
       - sudo pip3 install requests semantic_version lxml
-      - 3rdparty/install-qt.sh -d ${QT_INSTALL_DIR} --version ${QT_VERSION} ${QT_MODULES} icu
+      - sudo python3 3rdparty/qt-downloader linux desktop ${QT_VERSION} gcc_64 --output=${QT_INSTALL_DIR} --qt_modules="${QT_MODULES} icu"
       - export QTDIR="${QT_INSTALL_DIR}/${QT_VERSION}/gcc_64"
       - export QT_QPA_PLATFORM_PLUGIN_PATH=$QTDIR/plugins
       - export PATH="$QTDIR/bin:$PATH"
       - export LD_LIBRARY_PATH=$QTDIR/lib
-      - ./install-qtwebkit RHEL_7_6-GCC-Linux-RHEL_7_6-X86_64
     before_script:
-      - du -hs $QTDIR
-      - qmake -query
+      - sudo du -hs $QTDIR
+      - sudo qmake -query
     script:
-      - ./build-pyqt5.sh
-      - ./build-otter.sh
-      - ./build-phantomjs.sh
-      - ./build-examples.sh
-      - ./create-qa-archive.sh qa-${TRAVIS_JOB_NUMBER}-linux-x86_64.7z
+      - sudo ./build-pyqt5.sh
+      - sudo ./build-otter.sh
+      - sudo ./build-phantomjs.sh
+      - sudo ./build-examples.sh
+      - sudo ./create-qa-archive.sh qa-${TRAVIS_JOB_NUMBER}-linux-x86_64.7z
