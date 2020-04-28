@@ -1,6 +1,8 @@
 language: cpp
 compiler: gcc
 sudo: required
+python:
+  - "3.7"
 dist: bionic
 git:
   depth: 3
@@ -55,13 +57,17 @@ matrix:
     osx_image: xcode10.1
     env:
       CMAKE_GENERATOR=Ninja
-      DEPLOY=1
+      DEPLOY=1   
+      TOOLCHAIN=clang_64
     install:
-      - sudo pip3 install requests semantic_version lxml
-      - sudo python3 3rdparty/qt-downloader -o ${QT_INSTALL_DIR} --version ${QT_VERSION} ${QT_MODULES} qtmacextras
+      - pip3 install requests semantic_version lxml
+      - python3 3rdparty/qt-downloader macos desktop ${QT_VERSION} ${TOOLCHAIN} --output=${QT_INSTALL_DIR} --qt_modules="${QT_MODULES} qtmacextras"
       - export QTDIR="${QT_INSTALL_DIR}/${QT_VERSION}/clang_64"
       - export QT_QPA_PLATFORM_PLUGIN_PATH=$QTDIR/plugins
       - export PATH="$QTDIR/bin:$PATH"
+      - ls 3rdparty
+      - chmod a+x 3rdparty/installer.sh
+      - 3rdparty/installer.sh
       - ./install-qtwebkit MacOS_10_13-Clang-MacOS-MacOS_10_13-X86_64
     before_script:
       - du -hs $QTDIR
@@ -157,19 +163,23 @@ matrix:
     env:
       CMAKE_GENERATOR=Ninja
       DEPLOY=1
+      TOOLCHAIN=gcc_64
     install:
-      - sudo pip3 install requests semantic_version lxml
-      - sudo python3 3rdparty/qt-downloader linux desktop ${QT_VERSION} gcc_64 --output=${QT_INSTALL_DIR} --qt_modules="${QT_MODULES} icu"
-      - export QTDIR="${QT_INSTALL_DIR}/${QT_VERSION}/gcc_64"
+      - pip3 install requests semantic_version lxml
+      - python3 3rdparty/qt-downloader linux desktop ${QT_VERSION} ${TOOLCHAIN} --output=${QT_INSTALL_DIR} --qt_modules="${QT_MODULES} icu"
+      - export QTDIR="${QT_INSTALL_DIR}/${QT_VERSION}/${TOOLCHAIN}"
       - export QT_QPA_PLATFORM_PLUGIN_PATH=$QTDIR/plugins
       - export PATH="$QTDIR/bin:$PATH"
       - export LD_LIBRARY_PATH=$QTDIR/lib
+      - ls 3rdparty
+      - chmod a+x 3rdparty/installer.sh
+      - 3rdparty/installer.sh
     before_script:
-      - sudo du -hs $QTDIR
-      - sudo qmake -query
+      - du -hs $QTDIR
+      - qmake -query
     script:
-      - sudo ./build-pyqt5.sh
-      - sudo ./build-otter.sh
-      - sudo ./build-phantomjs.sh
-      - sudo ./build-examples.sh
-      - sudo ./create-qa-archive.sh qa-${TRAVIS_JOB_NUMBER}-linux-x86_64.7z
+      - ./build-pyqt5.sh
+      - ./build-otter.sh
+      - ./build-phantomjs.sh
+      - ./build-examples.sh
+      - ./create-qa-archive.sh qa-${TRAVIS_JOB_NUMBER}-linux-x86_64.7z
