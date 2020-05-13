@@ -84,16 +84,18 @@ matrix:
       CMAKE_GENERATOR="Visual Studio 15 2017"
       QT_INSTALL_DIR=C:/Qt
       DEPLOY=1
+      TOOLCHAIN=win32_msvc2017
     before_install:
       - powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File windows_setup.ps1
       - gem install bundler
     install:
-      - pip3 install requests semantic_version lxml
-      - choco install jom
-      - 3rdparty/install-qt.sh -d ${QT_INSTALL_DIR} --version ${QT_VERSION} --toolchain win32_msvc2017 ${QT_MODULES} qtwinextras
+      - choco install jom python3
+      - py -m pip install requests semantic_version lxml
+      - py 3rdparty/qt-downloader windows desktop ${QT_VERSION} ${TOOLCHAIN} --output=${QT_INSTALL_DIR} --qt_modules="${QT_MODULES} qtwinextras"
       - export QTDIR="${QT_INSTALL_DIR}/${QT_VERSION}/msvc2017"
       - export QT_QPA_PLATFORM_PLUGIN_PATH="$(cygpath -u $QTDIR/plugins)"
       - export PATH="$(cygpath -u ${QTDIR})/bin:$PATH"
+      - 3rdparty/installer.sh
       - ./install-qtwebkit Windows_10-MSVC2017-Windows-Windows_10-X86
     before_script:
       - du -hs $QTDIR
@@ -109,16 +111,18 @@ matrix:
       CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
       QT_INSTALL_DIR=C:/Qt
       DEPLOY=1
+      TOOLCHAIN=win64_msvc2017_64
     before_install:
       - powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File windows_setup.ps1
       - gem install bundler
     install:
-      - pip3 install requests semantic_version lxml
-      - choco install jom
-      - 3rdparty/install-qt.sh -d ${QT_INSTALL_DIR} --version ${QT_VERSION} --toolchain win64_msvc2017_64 ${QT_MODULES} qtwinextras
+      - choco install jom python3
+      - py -m pip install requests semantic_version lxml
+      - py 3rdparty/qt-downloader windows desktop ${QT_VERSION} ${TOOLCHAIN} --output=${QT_INSTALL_DIR} --qt_modules="${QT_MODULES} qtwinextras"
       - export QTDIR="${QT_INSTALL_DIR}/${QT_VERSION}/msvc2017_64"
       - export QT_QPA_PLATFORM_PLUGIN_PATH="$(cygpath -u $QTDIR/plugins)"
       - export PATH="$(cygpath -u ${QTDIR})/bin:$PATH"
+      - 3rdparty/installer.sh
       - ./install-qtwebkit Windows_10-MSVC2017-Windows-Windows_10-X86_64
     before_script:
       - du -hs $QTDIR
@@ -136,17 +140,24 @@ matrix:
       QT_INSTALL_DIR=C:/Qt
       MAKE=mingw32-make
       DEPLOY=1
+      TOOLCHAIN=win32_mingw73
     before_install:
       - powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File windows_setup.ps1
       - gem install bundler
     install:
-      - pip3 install requests semantic_version lxml
-      - 3rdparty/install-qt.sh -d ${QT_INSTALL_DIR} --version ${QT_VERSION} --toolchain win32_mingw73 ${QT_MODULES} qtwinextras
+      - choco install python3
+      - py -m pip install requests semantic_version lxml
+      - where g++
+      - py 3rdparty/qt-downloader windows desktop ${QT_VERSION} ${TOOLCHAIN} --output=${QT_INSTALL_DIR} --qt_modules="${QT_MODULES} qtwinextras"
+      - export PATH="$(cygpath -u ${QT_INSTALL_DIR})/Tools/mingw730_32/bin:$PATH"
+      - ls ${QT_INSTALL_DIR}/Tools/mingw730_32/bin
+      - where g++
       - export QTDIR="${QT_INSTALL_DIR}/${QT_VERSION}/mingw73_32"
+      - where g++
       - export QT_QPA_PLATFORM_PLUGIN_PATH="$(cygpath -u $QTDIR/plugins)"
       - export PATH="$(cygpath -u ${QTDIR})/bin:$PATH"
-      - 3rdparty/install-qt.sh -d ${QT_INSTALL_DIR} --version 7.3.0 win32_mingw730
-      - export PATH="$(cygpath -u ${QT_INSTALL_DIR})/Tools/mingw730_32/bin:$PATH"
+      - 3rdparty/installer.sh
+      - echo $PATH
       - ./install-qtwebkit Windows_7-Mingw73-Windows-Windows_7-X86
     before_script:
       - du -hs $QTDIR
@@ -174,6 +185,7 @@ matrix:
       - ls 3rdparty
       - chmod a+x 3rdparty/installer.sh
       - 3rdparty/installer.sh
+      - ./install-qtwebkit RHEL_7_6-GCC-Linux-RHEL_7_6-X86_64
     before_script:
       - du -hs $QTDIR
       - qmake -query
