@@ -1,8 +1,6 @@
 language: cpp
 compiler: gcc
 sudo: required
-python:
-  - "3.7"
 dist: bionic
 git:
   depth: 3
@@ -147,19 +145,13 @@ matrix:
     install:
       - choco install python3
       - py -m pip install requests semantic_version lxml
-      - where g++
-      - - 3rdparty/install-qt.sh -d ${QT_INSTALL_DIR}/test --version ${QT_VERSION} --toolchain win32_mingw73 ${QT_MODULES} qtwinextras
-      - py 3rdparty/qt-downloader windows desktop ${QT_VERSION} ${TOOLCHAIN} --output=${QT_INSTALL_DIR} --qt_modules="${QT_MODULES} qtwinextras"
+      - py 3rdparty/qt-downloader windows desktop ${QT_VERSION} ${TOOLCHAIN} --output=${QT_INSTALL_DIR} --qt_modules="${QT_MODULES} qtwinextras" --mingw win32_mingw730
+      - ls -R ${QT_INSTALL_DIR}/Tools/
       - export PATH="$(cygpath -u ${QT_INSTALL_DIR})/Tools/mingw730_32/bin:$PATH"
-      - ls -R ${QT_INSTALL_DIR}
-      - ls -R ${QT_INSTALL_DIR}/test
-      - where g++
       - export QTDIR="${QT_INSTALL_DIR}/${QT_VERSION}/mingw73_32"
-      - where g++
       - export QT_QPA_PLATFORM_PLUGIN_PATH="$(cygpath -u $QTDIR/plugins)"
       - export PATH="$(cygpath -u ${QTDIR})/bin:$PATH"
       - 3rdparty/installer.sh
-      - echo $PATH
       - ./install-qtwebkit Windows_7-Mingw73-Windows-Windows_7-X86
     before_script:
       - du -hs $QTDIR
