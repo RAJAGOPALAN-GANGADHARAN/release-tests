@@ -14,6 +14,7 @@ addons:
       - libgl1-mesa-dev
       - libgstreamer-plugins-base1.0-0
       - libpulse-mainloop-glib0
+      - libxkbcommon-x11-0
       - python3-pip
       - python3-setuptools
   homebrew:
@@ -26,9 +27,9 @@ addons:
 env:
   global:
     - QT_VERSION=5.14.1
-    - PyQt5_VERSION=5.13.2
+    - PyQt5_VERSION=5.14.1
     - QTWEBKIT_BRANCH=5.212
-    - QTWEBKIT_BUILD_NUMBER=1583342509
+    - QTWEBKIT_BUILD_NUMBER=1584941372
     - QT_INSTALL_DIR=~/Qt
     - QT_MODULES="qtbase qtdeclarative qtlocation qtmultimedia qtsensors qtwebchannel qtsvg qtxmlpatterns"
     - HOST_N_CORES=2
@@ -47,6 +48,7 @@ deploy:
 
 after_deploy:
   - ./bintray_upload.sh qa-*.7z
+  - ./bintray_upload.sh otter-browser-packages/*
 
 matrix:
   include:
@@ -81,13 +83,14 @@ matrix:
       - powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File windows_setup.ps1
       - gem install bundler
     install:
-      - choco install jom
-      - 3rdparty/install-qt.sh -d ${QT_INSTALL_DIR} --version ${QT_VERSION} --toolchain win32_msvc2017 ${QT_MODULES} qtwinextras
+      - choco install jom python innosetup
+      - 3rdparty/install-qt.sh -d ${QT_INSTALL_DIR} --version ${QT_VERSION} --toolchain win32_msvc2017 ${QT_MODULES} qtwinextras qttools
       - export QTDIR="${QT_INSTALL_DIR}/${QT_VERSION}/msvc2017"
       - export QT_QPA_PLATFORM_PLUGIN_PATH="$(cygpath -u $QTDIR/plugins)"
       - export PATH="$(cygpath -u ${QTDIR})/bin:$PATH"
       - 3rdparty/install-qt.sh -d ${QT_INSTALL_DIR} --version 1.1.1d openssl.win_x86
       - ./install-qtwebkit Windows_10-MSVC2017-Windows-Windows_10-X86
+      - rm $QTDIR/plugins/position/qtposition_serialnmea*
     before_script:
       - du -hs $QTDIR
       - qmake -query
@@ -106,13 +109,14 @@ matrix:
       - powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File windows_setup.ps1
       - gem install bundler
     install:
-      - choco install jom
-      - 3rdparty/install-qt.sh -d ${QT_INSTALL_DIR} --version ${QT_VERSION} --toolchain win64_msvc2017_64 ${QT_MODULES} qtwinextras
+      - choco install jom python innosetup
+      - 3rdparty/install-qt.sh -d ${QT_INSTALL_DIR} --version ${QT_VERSION} --toolchain win64_msvc2017_64 ${QT_MODULES} qtwinextras qttools
       - export QTDIR="${QT_INSTALL_DIR}/${QT_VERSION}/msvc2017_64"
       - export QT_QPA_PLATFORM_PLUGIN_PATH="$(cygpath -u $QTDIR/plugins)"
       - export PATH="$(cygpath -u ${QTDIR})/bin:$PATH"
       - 3rdparty/install-qt.sh -d ${QT_INSTALL_DIR} --version 1.1.1d openssl.win_x64
       - ./install-qtwebkit Windows_10-MSVC2017-Windows-Windows_10-X86_64
+      - rm $QTDIR/plugins/position/qtposition_serialnmea*
     before_script:
       - du -hs $QTDIR
       - qmake -query
@@ -133,13 +137,15 @@ matrix:
       - powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File windows_setup.ps1
       - gem install bundler
     install:
-      - 3rdparty/install-qt.sh -d ${QT_INSTALL_DIR} --version ${QT_VERSION} --toolchain win32_mingw73 ${QT_MODULES} qtwinextras
+      - choco install python innosetup
+      - 3rdparty/install-qt.sh -d ${QT_INSTALL_DIR} --version ${QT_VERSION} --toolchain win32_mingw73 ${QT_MODULES} qtwinextras qttools
       - export QTDIR="${QT_INSTALL_DIR}/${QT_VERSION}/mingw73_32"
       - export QT_QPA_PLATFORM_PLUGIN_PATH="$(cygpath -u $QTDIR/plugins)"
       - export PATH="$(cygpath -u ${QTDIR})/bin:$PATH"
       - 3rdparty/install-qt.sh -d ${QT_INSTALL_DIR} --version 7.3.0 win32_mingw730
       - export PATH="$(cygpath -u ${QT_INSTALL_DIR})/Tools/mingw730_32/bin:$PATH"
       - ./install-qtwebkit Windows_7-Mingw73-Windows-Windows_7-X86
+      - rm $QTDIR/plugins/position/qtposition_serialnmea*
     before_script:
       - du -hs $QTDIR
       - qmake -query
@@ -162,6 +168,7 @@ matrix:
       - export PATH="$QTDIR/bin:$PATH"
       - export LD_LIBRARY_PATH=$QTDIR/lib
       - ./install-qtwebkit RHEL_7_6-GCC-Linux-RHEL_7_6-X86_64
+      - rm $QTDIR/plugins/position/libqtposition_serialnmea*
     before_script:
       - du -hs $QTDIR
       - qmake -query

@@ -6,16 +6,25 @@ cmake --build otter-browser-build --config Release -j $HOST_N_CORES
 echo "Built successfully, trying to run result"
 export QT_QPA_PLATFORM=minimal
 UNAME=$(uname)
+
+BUILD_DIR=otter-browser-build
 if [ "${CMAKE_GENERATOR:0:5}" = "Visua" ]; then
-    ls -la otter-browser-build/Release/otter-browser.exe
-    otter-browser-build/Release/otter-browser.exe --version
-elif [ "${CMAKE_GENERATOR:0:5}" = "MinGW" ]; then
-    ls -la otter-browser-build/otter-browser.exe
-    otter-browser-build/otter-browser.exe --version
-elif [ "$UNAME" = "Darwin" ]; then
-    ls -la "otter-browser-build/Otter Browser.app/Contents/MacOS/Otter Browser"
-    "otter-browser-build/Otter Browser.app/Contents/MacOS/Otter Browser" --version
-else
-    ls -la otter-browser-build/otter-browser
-    otter-browser-build/otter-browser --version
+    BUILD_DIR=otter-browser-build/Release
 fi
+
+ls -la $BUILD_DIR
+
+if [ "$UNAME" = "Darwin" ]; then
+    "$BUILD_DIR/Otter Browser.app/Contents/MacOS/Otter Browser" --version
+else
+    $BUILD_DIR/otter-browser --version
+fi
+
+PYTHON=python3
+if which py >& /dev/null; then
+    PYTHON=py
+fi
+
+mkdir otter-browser-packages
+$PYTHON otter-browser/packaging/deploy.py --build-path=$BUILD_DIR --target-path=otter-browser-packages
+find otter-browser-packages

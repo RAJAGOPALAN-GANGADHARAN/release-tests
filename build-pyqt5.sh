@@ -4,7 +4,7 @@ pip3 install sip
 
 PyQt5_DIRNAME="PyQt5-${PyQt5_VERSION}"
 PyQt5_ARCHIVE="${PyQt5_DIRNAME}.tar.gz"
-curl --progress-bar -L -OJ https://www.riverbankcomputing.com/static/Downloads/PyQt5/$PyQt5_VERSION/$PyQt5_ARCHIVE
+curl --progress-bar -L -OJ https://files.pythonhosted.org/packages/source/P/PyQt5/$PyQt5_ARCHIVE
 tar xf $PyQt5_ARCHIVE
 cd $PyQt5_DIRNAME
 # Use --concatenate to speed up build
@@ -20,7 +20,9 @@ python3 configure.py --qmake $(which qmake) --bindir=$QTDIR/bin --confirm-licens
     --disable=QtSvg \
     --disable=QtPositioning \
     --disable=QtWebChannel \
-    --disable=QtLocation
+    --disable=QtLocation \
+    --disable=QtQml \
+    --disable=QtQuick
 make -j $HOST_N_CORES
 sudo make install
 cd ..
