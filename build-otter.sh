@@ -24,7 +24,23 @@ PYTHON=python3
 if which py >& /dev/null; then
     PYTHON=py
 fi
-
+### msvc
+# QT_INSTALL_DIR/Tools/OpenSSL/Win_x64/   libcrypto-1_1-x64.dll  libssl-1_1-x64.dll
+### mingw
+# 
 mkdir otter-browser-packages
-$PYTHON otter-browser/packaging/deploy.py --build-path=$BUILD_DIR --target-path=otter-browser-packages
+
+if [ "$TOOLCHAIN" = "win64_msvc2017_64" ]; then
+    PREFIX="$QT_INSTALL_DIR/Tools/OpenSSL/Win_x64/bin"
+    $PYTHON otter-browser/packaging/deploy.py --build-path=$BUILD_DIR --target-path=otter-browser-packages --extra-libs $PREFIX/libcrypto-1_1-x64.dll $PREFIX/libssl-1_1-x64.dll 
+elif [ "$TOOLCHAIN" = "win32_msvc2017" ]; then
+    PREFIX="$QT_INSTALL_DIR/Tools/OpenSSL/Win_x86/bin"
+    $PYTHON otter-browser/packaging/deploy.py --build-path=$BUILD_DIR --target-path=otter-browser-packages --extra-libs $PREFIX/libcrypto-1_1.dll $PREFIX/libssl-1_1.dll 
+elif [ "$TOOLCHAIN" = "win32_mingw73" ]; then
+    PREFIX="$QT_INSTALL_DIR/Tools/mingw730_32/opt/bin"
+    $PYTHON otter-browser/packaging/deploy.py --build-path=$BUILD_DIR --target-path=otter-browser-packages --extra-libs $PREFIX/ssleay32.dll $PREFIX/libeay32.dll 
+else
+    $PYTHON otter-browser/packaging/deploy.py --build-path=$BUILD_DIR --target-path=otter-browser-packages
+fi
+
 find otter-browser-packages
