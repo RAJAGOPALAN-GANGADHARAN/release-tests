@@ -198,7 +198,7 @@ matrix:
     before_script:
       - du -hs $QTDIR
       - qmake -query
-      - py installed-files-checker.py --version=${QTWEBKIT_BRANCH}.0 --os=linux --qt=${QTDIR} --template=QtBinaryChecklist.txt --release --qt_install_header=${QTDIR}/include --qt_install_libs=${QTDIR}/lib --qt_install_archdata=${QTDIR} --qt_install_libexecs=${QTDIR}/libexec
+      - ./installed-files-checker.py --version=${QTWEBKIT_BRANCH}.0 --os=linux --qt=${QTDIR} --template=QtBinaryChecklist.txt --release --qt_install_header=${QTDIR}/include --qt_install_libs=${QTDIR}/lib --qt_install_archdata=${QTDIR} --qt_install_libexecs=${QTDIR}/libexec
     script:
       - ./build-pyqt5.sh
       - ./build-otter.sh
