@@ -40,6 +40,9 @@ parser.add_argument("--qt_install_header", help='Qt headers install path')
 parser.add_argument("--qt_install_libs", help='Qt libraries install path')
 parser.add_argument("--qt_install_archdata", help='Qt archdata install path')
 parser.add_argument("--qt_install_libexecs", help='Qt libexecs install path')
+parser.add_argument("--force_debug_info", help='Enable debug symbols for release builds', action='store_true')
+parser.add_argument("--icu_version", help='ICU version')
+parser.add_argument("--toolchain", help='Toolchain used e.g. msvc, mingw for windows')
 
 args = parser.parse_args()
 
@@ -47,22 +50,20 @@ template_abspath = os.path.abspath(args.template)
 template_folder = os.path.dirname(template_abspath)
 template_name = os.path.basename(template_abspath)
 
-file_loader = FileSystemLoader(template_folder) # directory of template file
-env = Environment(loader=file_loader)
+file_loader = FileSystemLoader( template_folder ) # directory of template file
+env = Environment( loader=file_loader )
 
-template = env.get_template(template_name) # load template file
+template = env.get_template( template_name ) # load template file
 
 major, minor, patch = args.version.split('.')
 
-check_list = template.render(os=args.os,
-    major=major, version=args.version, release=args.release, debug=args.debug).split('\n')
-
-file_count = {"linux_Release": 108, "windows_Debug": 118,"windows_Release":110, "macos_Release": 170}
+check_list = template.render( os=args.os,
+    major=major, version=args.version, release=args.release, debug=args.debug,
+    icu_version=args.icu_version, force_debug_info=args.force_debug_info, toolchain=args.toolchain ).split('\n')
 
 
 def verify_linux(check_list):
     error_list = []
-    count = 0
 
     for line in check_list:
         if line.rstrip():
@@ -75,30 +76,28 @@ def verify_linux(check_list):
             elif line.startswith('libexec/'):
                 chk_path = os.path.join(args.qt_install_libexecs, line[len('libexec/'):])
 
-            count+=1
-
             if not os.path.exists(chk_path):
                 error_list.append(chk_path)
 
-    return [error_list, count]
+    return error_list
 
 def verify_windows_mac(check_list):
     error_list = []
-    count = 0
 
     build = os.path.join(os.getcwd(),args.build) if args.build else None
     for line in check_list:
         if line.rstrip():
-            if line.startswith('bin') and build:
-                chk_path = os.path.join(build, line)
+            chk_path = None
+            if line.startswith('bin'):
+                if build:
+                    chk_path = os.path.join(build, line)
             else:
                 chk_path = os.path.join(args.qt, line)
 
-            count+=1
-            if not os.path.exists(chk_path):
+            if chk_path and (not os.path.exists(chk_path)):
                 error_list.append(chk_path)
 
-    return [error_list, count]
+    return error_list
 
 
 if args.os == 'linux':
@@ -106,12 +105,9 @@ if args.os == 'linux':
 elif args.os == 'windows' or args.os == 'macos':
     res = verify_windows_mac(check_list)
 
-build_type = 'Debug' if args.debug else 'Release'
-
-print("Verified {0}/{1} files".format(res[1],file_count[args.os+'_'+build_type]))
-if len(res[0])!=0:
+if len(res)!=0:
     print("Errors found files below are missing:")
-    for err in res[0]:
+    for err in res:
         print(err)
     exit(1)
 

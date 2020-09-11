@@ -71,7 +71,7 @@ matrix:
     before_script:
       - du -hs $QTDIR
       - qmake -query
-      - ./installed-files-checker.py --version=${QTWEBKIT_BRANCH}.0 --os=macos --qt=${QTDIR} --template=QtBinaryChecklist.txt --release
+      - ./installed-files-checker.py --version=${QTWEBKIT_BRANCH}.0 --icu_version=65 --os=macos --qt=${QTDIR} --template=QtBinaryChecklist.txt --release
     script:
       - ./build-pyqt5.sh
       - ./build-otter.sh
@@ -104,7 +104,7 @@ matrix:
     before_script:
       - du -hs $QTDIR
       - qmake -query
-      - py installed-files-checker.py --version=${QTWEBKIT_BRANCH}.0 --os=windows --qt=${QTDIR} --template=QtBinaryChecklist.txt --release
+      - py installed-files-checker.py --version=${QTWEBKIT_BRANCH}.0 --icu_version=65 --toolchain=msvc --os=windows --qt=${QTDIR} --template=QtBinaryChecklist.txt --release 
     script:
       - ./build-otter.sh
       - VS_ARCH=x86 ./build-phantomjs-vs.bat
@@ -135,7 +135,7 @@ matrix:
     before_script:
       - du -hs $QTDIR
       - qmake -query
-      - py installed-files-checker.py --version=${QTWEBKIT_BRANCH}.0 --os=windows --qt=${QTDIR} --template=QtBinaryChecklist.txt --release
+      - py installed-files-checker.py --version=${QTWEBKIT_BRANCH}.0 --icu_version=65 --toolchain=msvc --os=windows --qt=${QTDIR} --template=QtBinaryChecklist.txt --release
     script:
       - ./build-otter.sh
       - VS_ARCH=amd64 ./build-phantomjs-vs.bat
@@ -172,7 +172,7 @@ matrix:
       - qmake -query
       - g++ -v
       - mingw32-make --version
-      - py installed-files-checker.py --version=${QTWEBKIT_BRANCH}.0 --os=windows --qt=${QTDIR} --template=QtBinaryChecklist.txt --release
+      - py installed-files-checker.py --version=${QTWEBKIT_BRANCH}.0 --icu_version=65 --toolchain=mingw --os=windows --qt=${QTDIR} --template=QtBinaryChecklist.txt --release
     script:
       - ./build-otter.sh
       - ./build-phantomjs.sh
@@ -198,7 +198,7 @@ matrix:
     before_script:
       - du -hs $QTDIR
       - qmake -query
-      - ./installed-files-checker.py --version=${QTWEBKIT_BRANCH}.0 --os=linux --qt=${QTDIR} --template=QtBinaryChecklist.txt --release --qt_install_header=${QTDIR}/include --qt_install_libs=${QTDIR}/lib --qt_install_archdata=${QTDIR} --qt_install_libexecs=${QTDIR}/libexec
+      - ./installed-files-checker.py --version=${QTWEBKIT_BRANCH}.0 --icu_version=65 --os=linux --qt=${QTDIR} --template=QtBinaryChecklist.txt --release --qt_install_header=${QTDIR}/include --qt_install_libs=${QTDIR}/lib --qt_install_archdata=${QTDIR} --qt_install_libexecs=${QTDIR}/libexec
     script:
       - ./build-pyqt5.sh
       - ./build-otter.sh
