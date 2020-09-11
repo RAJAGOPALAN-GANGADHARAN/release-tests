@@ -105,7 +105,7 @@ lib/libQt5WebKitWidgets.so.{{version}}
 libexec/QtWebPluginProcess
 {% endif %}
 
-{% if debug %}
+{% if force_debug_info %}
 lib/libQt5WebKit.so.{{version}}.debug
 lib/libQt5WebKitWidgets.so.{{version}}.debug
 {% endif %}

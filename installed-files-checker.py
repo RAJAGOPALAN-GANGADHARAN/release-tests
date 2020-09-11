@@ -116,4 +116,4 @@ print("All files are installed properly")
 
 #python3 installed-files-checker.py --version 5.212.0 --build /mnt/c/qtwebkit/build --os linux
 #
-# py installed-files-checker.py --version 5.20.0 --qt "C:/Qt/5.14.2/msvc2017_64" --build "C:/qtwebkit/build/" --os windows
+# py installed-files-checker.py --version 5.20.0 --qt "C:/Qt/5.14.2/msvc2017_64" --build "C:/qtwebkit/build/" --os windows --icu_version=65
