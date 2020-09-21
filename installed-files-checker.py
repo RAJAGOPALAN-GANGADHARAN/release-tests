@@ -27,6 +27,7 @@ import sys
 from jinja2 import Environment, FileSystemLoader
 import argparse
 import os
+from colorama import Fore
 
 parser = argparse.ArgumentParser(description='Checker for Qtwebkit Binaries')
 parser.add_argument(
@@ -47,8 +48,10 @@ parser.add_argument("--force_debug_info",
 parser.add_argument("--icu_version", help='ICU version')
 parser.add_argument(
     "--toolchain", help='Toolchain used e.g. msvc, mingw for windows')
-parser.add_argument("-v", "--verbose", action='store_true', help='Print paths of checked files')
-parser.add_argument("--no-wk2", action="store_false", help='Disable wk2 specific files')
+parser.add_argument("-v", "--verbose", action='store_true',
+                    help='Print paths of checked files')
+parser.add_argument("--no-wk2", action="store_false",
+                    help='Disable wk2 specific files')
 
 args = parser.parse_args()
 
@@ -72,8 +75,10 @@ check_list = template.render(os=args.os,
                              icu_version=args.icu_version, wk2=args.no_wk2,
                              force_debug_info=args.force_debug_info, toolchain=args.toolchain).split('\n')
 
+
 def print_error(msg):
-    print(msg, file=sys.stderr)
+    print(Fore.RED+msg, file=sys.stderr)
+
 
 def custom_args_verify(check_list):
     error_list = []
@@ -81,9 +86,6 @@ def custom_args_verify(check_list):
     for line in check_list:
         if line.rstrip():
             line = line.lstrip()
-
-            if args.verbose:
-                print(line)
 
             if line.startswith('include/'):
                 chk_path = os.path.join(
@@ -100,10 +102,10 @@ def custom_args_verify(check_list):
             if not os.path.exists(chk_path):
                 error_list.append(chk_path)
                 if args.verbose:
-                    print(line, "\t", "fail")
+                    print(line, "\t", Fore.RED+"fail")
             else:
                 if args.verbose:
-                    print(line, "\t", "ok")
+                    print(line, "\t", Fore.GREEN+"ok")
 
     return error_list
 
@@ -116,26 +118,30 @@ def default_verify(check_list):
             line = line.lstrip()
 
             chk_path = os.path.join(args.install_prefix, line)
+
             if not os.path.exists(chk_path):
                 error_list.append(chk_path)
                 if args.verbose:
-                    print(line,"\t","fail")
+                    print(line, "\t", Fore.RED+"fail")
             else:
                 if args.verbose:
-                    print(line, "\t", "ok")
+                    print(line, "\t", Fore.GREEN+"ok")
 
     return error_list
+
 
 if not args.qt_install_headers and not args.install_prefix:
     print_error("Specify either the install prefix or custom locations")
     exit(1)
 
-res = custom_args_verify(check_list) if args.qt_install_headers else default_verify(check_list)
+res = custom_args_verify(
+    check_list) if args.qt_install_headers else default_verify(check_list)
 
 if len(res) != 0:
-    print_error("Errors found files below are missing:")
-    for err in res:
-        print_error(err)
+    if not args.verbose:
+        print_error("Errors found files below are missing:")
+        for err in res:
+            print_error(err)
     exit(1)
 
 

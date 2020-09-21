@@ -71,7 +71,7 @@ matrix:
       DEPLOY=1
       TOOLCHAIN=clang_64
     install:
-      - pip3 install requests semantic_version lxml jinja2
+      - pip3 install requests semantic_version lxml jinja2 colorama
       - python3 3rdparty/qt-downloader macos desktop ${QT_VERSION} ${TOOLCHAIN} --output=${QT_INSTALL_DIR} --qt_modules="${QT_MODULES} qtmacextras"
       - export QTDIR="${QT_INSTALL_DIR}/${QT_VERSION}/clang_64"
       - export QT_QPA_PLATFORM_PLUGIN_PATH=$QTDIR/plugins
@@ -101,7 +101,7 @@ matrix:
       - gem install bundler
     install:
       - choco install jom python3 innosetup
-      - py -m pip install requests semantic_version lxml jinja2
+      - py -m pip install requests semantic_version lxml jinja2 colorama
       - py 3rdparty/qt-downloader windows desktop ${QT_VERSION} ${TOOLCHAIN} --output=${QT_INSTALL_DIR} --qt_modules="${QT_MODULES} qtwinextras qttools" --openssl=openssl_x86
       - export QTDIR="${QT_INSTALL_DIR}/${QT_VERSION}/msvc2019"
       - export QT_QPA_PLATFORM_PLUGIN_PATH="$(cygpath -u $QTDIR/plugins)"
@@ -132,7 +132,7 @@ matrix:
       - gem install bundler
     install:
       - choco install jom python3 innosetup
-      - py -m pip install requests semantic_version lxml jinja2
+      - py -m pip install requests semantic_version lxml jinja2 colorama
       - py 3rdparty/qt-downloader windows desktop ${QT_VERSION} ${TOOLCHAIN} --output=${QT_INSTALL_DIR} --qt_modules="${QT_MODULES} qtwinextras qttools" --openssl=openssl_x64
       - export QTDIR="${QT_INSTALL_DIR}/${QT_VERSION}/msvc2019_64"
       - export QT_QPA_PLATFORM_PLUGIN_PATH="$(cygpath -u $QTDIR/plugins)"
@@ -165,7 +165,7 @@ matrix:
       - gem install bundler
     install:
       - choco install python3 innosetup
-      - py -m pip install requests semantic_version lxml jinja2
+      - py -m pip install requests semantic_version lxml jinja2 colorama
       - py 3rdparty/qt-downloader windows desktop ${QT_VERSION} ${TOOLCHAIN} --output=${QT_INSTALL_DIR} --qt_modules="${QT_MODULES} qtwinextras qttools" --mingw win32_mingw810 --openssl=openssl_x86
       - ls -R ${QT_INSTALL_DIR}/Tools/
       - export PATH="$(cygpath -u ${QT_INSTALL_DIR})/Tools/mingw810_32/bin:$PATH"
@@ -195,7 +195,7 @@ matrix:
       DEPLOY=1
       TOOLCHAIN=gcc_64
     install:
-      - pip3 install requests semantic_version lxml jinja2
+      - pip3 install requests semantic_version lxml jinja2 colorama
       - python3 3rdparty/qt-downloader linux desktop ${QT_VERSION} ${TOOLCHAIN} --output=${QT_INSTALL_DIR} --qt_modules="${QT_MODULES} icu"
       - export QTDIR="${QT_INSTALL_DIR}/${QT_VERSION}/${TOOLCHAIN}"
       - export QT_QPA_PLATFORM_PLUGIN_PATH=$QTDIR/plugins
