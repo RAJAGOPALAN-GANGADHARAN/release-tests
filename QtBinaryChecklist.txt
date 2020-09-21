@@ -1,3 +1,4 @@
+{% if wk2 %}
 include/QtWebKit/{{version}}/QtWebKit/private/qhttpheader_p.h
 include/QtWebKit/{{version}}/QtWebKit/private/qquicknetworkreply_p.h
 include/QtWebKit/{{version}}/QtWebKit/private/qquicknetworkrequest_p.h
@@ -25,6 +26,7 @@ include/QtWebKit/{{version}}/QtWebKit/private/qwebpreferences_p.h
 include/QtWebKit/{{version}}/QtWebKit/private/qwebpreferences_p_p.h
 include/QtWebKit/{{version}}/QtWebKit/private/qwebscriptworld_p.h
 include/QtWebKit/{{version}}/QtWebKit/private/qwebsecurityorigin_p.h
+{% endif %}
 include/QtWebKit/QWebDatabase
 include/QtWebKit/QWebElement
 include/QtWebKit/QWebElementCollection
@@ -189,6 +191,9 @@ qml/QtWebKit/experimental/qmldir
     bin/icudt{{icu_version}}.dll
     bin/icuin{{icu_version}}.dll
     bin/icuuc{{icu_version}}.dll
+    bin/QtWebNetworkProcess.exe
+    bin/QtWebProcess.exe
+    bin/QtWebStorageProcess.exe
 
     {% if toolchain=="msvc" %}
         bin/libxml2.dll

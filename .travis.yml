@@ -82,7 +82,7 @@ matrix:
     before_script:
       - du -hs $QTDIR
       - qmake -query
-      - ./installed-files-checker.py --os=macos --install_prefix=${QTDIR} --release ${INSTALL_FILE_CHECKER_ARGS} | wc -l
+      - ./installed-files-checker.py --os=macos --install_prefix=${QTDIR} --release ${INSTALL_FILE_CHECKER_ARGS}
     script:
       - ./build-pyqt5.sh
       - ./build-otter.sh
@@ -114,7 +114,7 @@ matrix:
     before_script:
       - du -hs $QTDIR
       - qmake -query
-      - py installed-files-checker.py --os=windows --toolchain=msvc --install_prefix=${QTDIR} --release --debug ${INSTALL_FILE_CHECKER_ARGS} | find /c /v `"`"
+      - py installed-files-checker.py --os=windows --toolchain=msvc --install_prefix=${QTDIR} --release --debug ${INSTALL_FILE_CHECKER_ARGS}
     script:
       - ./build-otter.sh
       - VS_ARCH=x86 ./build-phantomjs-vs.bat
@@ -145,7 +145,7 @@ matrix:
     before_script:
       - du -hs $QTDIR
       - qmake -query
-      - py installed-files-checker.py --os=windows --toolchain=msvc --install_prefix=${QTDIR} --release --debug ${INSTALL_FILE_CHECKER_ARGS} | find /c /v `"`"
+      - py installed-files-checker.py --os=windows --toolchain=msvc --install_prefix=${QTDIR} --release --debug ${INSTALL_FILE_CHECKER_ARGS}
     script:
       - ./build-otter.sh
       - VS_ARCH=amd64 ./build-phantomjs-vs.bat
@@ -182,7 +182,7 @@ matrix:
       - qmake -query
       - g++ -v
       - mingw32-make --version
-      - py installed-files-checker.py --os=windows --toolchain=mingw --install_prefix=${QTDIR} --release ${INSTALL_FILE_CHECKER_ARGS} | find /c /v `"`"
+      - py installed-files-checker.py --os=windows --toolchain=mingw --install_prefix=${QTDIR} --release ${INSTALL_FILE_CHECKER_ARGS}
     script:
       - ./build-otter.sh
       - ./build-phantomjs.sh
@@ -208,7 +208,7 @@ matrix:
     before_script:
       - du -hs $QTDIR
       - qmake -query
-      - ./installed-files-checker.py --os=linux --release --qt_install_header=${QTDIR}/include --qt_install_libs=${QTDIR}/lib --qt_install_archdata=${QTDIR} --qt_install_libexecs=${QTDIR}/libexec ${INSTALL_FILE_CHECKER_ARGS} | wc -l
+      - ./installed-files-checker.py --os=linux --release --qt_install_header=${QTDIR}/include --qt_install_libs=${QTDIR}/lib --qt_install_archdata=${QTDIR} --qt_install_libexecs=${QTDIR}/libexec ${INSTALL_FILE_CHECKER_ARGS}
     script:
       - ./build-pyqt5.sh
       - ./build-otter.sh
